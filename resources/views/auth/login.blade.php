@@ -1,73 +1,93 @@
-@extends('layouts.app')
+@extends('layouts.appauth')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+@include('part.notification')
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+@if( !empty(Session::get('nama')))
+<div class="row justify-content-center">
+    <div class="content-auth col-md-10 ">
+            {{-- <div class="image-auth col-md-4">
+                <img src="{{asset('img/logo_siwi.png')}}" alt="">
+            </div>
+            <div class="col-md-1"></div> --}}
+        <div class="card-auth col-md-6">
+                {{-- @include('part.notification') --}}
+                <div id="main" class="main col-md-12 text-md-center">
+                    <div class="preloader" id="preloader">
+                        <div class="preloader__square" id="preloader__square"></div>
+                        <div class="preloader__square" id="preloader__square"></div>
+                        <div class="preloader__square" id="preloader__square"></div>
+                        <div class="preloader__square" id="preloader__square"></div>
+                    </div>
+                    {{-- <div class="status">Loading<span class="status__dot">.</span><span class="status__dot">.</span><span class="status__dot">.</span></div> --}}
+                </div>
+
+                <div class="auth-header">
+                    <b>Selamat Datang, {{ Session::get('nama') }}</b>
+                </div>
+                <div class="p">
+                    Silakan &nbsp;<i>login</i>&nbsp; ke akun SIWI Anda
+                </div>
+                    <form method="POST" class="form-auth col-md-8" style="padding-top: 40px" action="{{ route('login') }}">
                         @csrf
-
+                            {{-- <div class="card-auth-title">
+                            <label for="email" class="text-md-right">{{ __('Alamat Surel ') }} (<i>e-mail</i>)</label>
+                            </div> --}}
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                                <input id="email" type="hidden" class="form-control auth-input @error('email') is-invalid @enderror" name="email" value="{{ Session::get('email') }}" required autocomplete="email" autofocus readonly>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                                @error('email')
+                                {{-- @error('email')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
-                                @enderror
-                            </div>
+                                @enderror --}}
+
                         </div>
 
+                        <div class="card-auth-title">
+                            <label class="text-md-right"><i>{{ __('Password') }}</i><label>
+                        </div>
                         <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                <input id="password" type="password" data-toggle="password" class="auth-input-pass form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
-                            </div>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
+                        <div class="form-group row col-md-12 form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
+                                        {{ __('Ingat Saya') }}
                                     </label>
-                                </div>
-                            </div>
+                                    <label class="form-forget" for="remember">
+                                        @if (Route::has('password.request'))
+                                            <a class="btn btn-link link-forget" href="{{ route('password.request') }}">
+                                                Lupa <i>Password </i>?
+                                            </a>
+                                        @endif
+                                    </label>
                         </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                        <div class="ow mb-0 form-footer text-md-center">
+                                <button type="submit" class="btn-auth btn-primary">
                                     {{ __('Login') }}
                                 </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
                         </div>
                     </form>
                 </div>
             </div>
-        </div>
-    </div>
 </div>
+            <div class="image-rotate">
+                <img src="{{asset('img/logo_angkatan.png')}}" class="logo-rotating" alt="">
+            </div>
+
+            <div class="image-rotate-2">
+                <img src="{{asset('img/logo_angkatan.png')}}" class="logo-rotating" alt="">
+            </div>
+@else
+    @include('welcome');
+@endif
 @endsection
