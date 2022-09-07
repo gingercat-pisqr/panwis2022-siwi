@@ -17,71 +17,45 @@ class RegistrasiController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if(Auth::user()){
-        $users = DB::table('users')->where('id', '=', $user->id)->get()
-        ->first();
-        $mahasiswas = DB::table('mahasiswas')->where('npm', '=', $user->npm)->get()
-        ->first();
-        $toga = DB::table('togas')->where('mahasiswa_id', '=', $mahasiswas->id)->get()
-        ->first();
-        $prodis = DB::table('prodis')->where('id', '=', $mahasiswas->prodi_id)->get()
-        ->first();
-        $status_registrasi = DB::table('statuss')->where('id', '=', 1)->get()->first();
+        if(Auth::user())
+        {
+            $users = DB::table('users')->where('id', '=', $user->id)->get()
+            ->first();
+            $mahasiswas = DB::table('mahasiswas')->where('npm', '=', $user->npm)->get()
+            ->first();
+            $toga = DB::table('togas')->where('mahasiswa_id', '=', $mahasiswas->id)->get()
+            ->first();
+            $prodis = DB::table('prodis')->where('id', '=', $mahasiswas->prodi_id)->get()
+            ->first();
+            $status_registrasi = DB::table('statuss')->where('id', '=', 1)->get()->first();
 
-        return view('home.register', ['users'=>$users,
-                            'mahasiswas'=>$mahasiswas,
-                            'prodis'=>$prodis,
-                            'status_registrasi'=>$status_registrasi,
-                            'toga'=>$toga]
-        );
-    }else{
-        return redirect('/');
-    }
+            return view('home.register', ['users'=>$users,
+                                        'mahasiswas'=>$mahasiswas,
+                                        'prodis'=>$prodis,
+                                        'status_registrasi'=>$status_registrasi,
+                                        'toga'=>$toga]
+            );
+        } else
+        {
+            return redirect('/');
+        }
     }
 
     public function editRegistrasi(){
         $user = Auth::user();
-        $editRegistrasi = DB::table('mahasiswas')
-              ->where('npm', $user->npm)
-              ->update(['status_registrasi' => 0]);
-        if($editRegistrasi){
+        $editRegistrasi = DB::table('mahasiswas')->where('npm', $user->npm)->update(['status_registrasi' => 0]);
+        if($editRegistrasi)
+        {
             return back();
-        }
-        else{
+        } else
+        {
             return back()->with(['error' => 'Gagal']);
         }
     }
 
-    public function lockRegistrasi(Request $request){
+    public function lockRegistrasi(Request $request)
+    {
 
-        request()->validate([
-			'nama' => 'required|string|min:3|max:255',
-			'npm' => 'required|string|min:1|max:10',
-			'kelas' => 'required|string|min:1|max:255',
-			'absen' => 'required|string|min:1|max:255',
-			'prodi_id' => 'required|string|min:1|max:255',
-			'jenis_kelamin' => 'required|string|min:1|max:255',
-			'nama_ayah' => 'required|string|min:1|max:255',
-			'nama_ibu' => 'required|string|min:1|max:255'
-		]);
-
-
-
-        $user = Auth::user();
-        $editRegistrasi = DB::table('mahasiswas')
-              ->where('npm', $user->npm)
-              ->update(['status_registrasi' => 2]);
-        if($editRegistrasi){
-            return back();
-        }
-        else{
-            return back()->with(['error' => 'Gagal Mengunci Data']);
-        }
-    }
-
-
-    public function createRegistrasi(Request $request){
-        //validasi
         request()->validate([
 			'nama' => 'required|string|min:3|max:255',
 			'npm' => 'required|string|min:1|max:10',
@@ -91,7 +65,41 @@ class RegistrasiController extends Controller
 			'jenis_kelamin' => 'required|string|min:1|max:255',
 			'nama_ayah' => 'required|string|min:1|max:255',
 			'nama_ibu' => 'required|string|min:1|max:255',
-            'image' => ['mimes:png,jpg,jpeg', 'max:1024']
+            'alamat' => 'required|string|min:1',
+            'status_vaksin' => 'required|string|min:1|max:255'
+		]);
+
+
+
+        $user = Auth::user();
+        $editRegistrasi = DB::table('mahasiswas')->where('npm', $user->npm)->update(['status_registrasi' => 2]);
+        if($editRegistrasi)
+        {
+            return back()->with(['success' => 'Data berhasil dikunci']);
+        } else
+        {
+            return back()->with(['error' => 'Gagal Mengunci Data']);
+        }
+    }
+
+
+    public function createRegistrasi(Request $request)
+    {
+        //validasi
+        request()->validate([
+			'nama' => 'required|string|min:3|max:255',
+			'npm' => 'required|string|min:1|max:10',
+			'kelas' => 'required|string|min:1|max:255',
+			'absen' => 'required|string|min:1|max:255',
+            'nomor_telepon' => 'required|string|min:1|max:255',
+			'prodi_id' => 'required|string|min:1|max:255',
+			'jenis_kelamin' => 'required|string|min:1|max:255',
+			'nama_ayah' => 'required|string|min:1|max:255',
+			'nama_ibu' => 'required|string|min:1|max:255',
+            'alamat' => 'required|string|min:1',
+            'image' => ['mimes:png,jpg,jpeg', 'max:1024'],
+            'status_vaksin' => 'required|string|min:1|max: 255',
+            'sertifikat_vaksin' => ['mimes:png,jpg,jpeg', 'max:1024']
 		]);
 
         // $prodis = DB::table('prodis')->where('id', '=', $request->prdi_id)->get()->first();
@@ -115,12 +123,15 @@ class RegistrasiController extends Controller
 
         ## mulai prosedur editing data
         $registform = $request->file('image');
-        if ($registform) {
+        if ($registform)
+        {
             # penamaan file baru
             $profilefile = Auth::user()->npm . '_' . $request->nama.'.' .$registform->getClientOriginalExtension();
             # file lama dihapus
-            if (!empty($exist_mahasiswa->foto)) {
-                if (public_path($destinationPath2 . '/' . $exist_mahasiswa->foto)) {
+            if (!empty($exist_mahasiswa->foto))
+            {
+                if (public_path($destinationPath2 . '/' . $exist_mahasiswa->foto))
+                {
                     unlink(public_path($destinationPath2 . '/' . $exist_mahasiswa->foto));
                 }
             }
@@ -129,99 +140,150 @@ class RegistrasiController extends Controller
             $data_mahasiswa->foto = $profilefile;
         }
 
+        $registform2 = $request->file('sertifikat_vaksin');
+        if ($registform2)
+        {
+            # penamaan file baru
+            $profilefile = Auth::user()->npm . '_' . $request->nama. '_Sertifikat Vaksin' . '.' .$registform->getClientOriginalExtension();
+            # file lama dihapus
+            if (!empty($exist_mahasiswa->sertifikat_vaksin))
+            {
+                if (public_path($destinationPath2 . '/' . $exist_mahasiswa->sertifikat_vaksin))
+                {
+                    unlink(public_path($destinationPath2 . '/' . $exist_mahasiswa->sertifikat_vaksin));
+                }
+            }
+            # penggantian file lama dengan yang baru
+            $registform2->move(public_path($destinationPath), $profilefile);
+            $data_mahasiswa->sertifikat_vaksin = $profilefile;
+        }
+
 
         ## periksa apakah ada data di database table mahasiswa
         if (!empty($exist_mahasiswa)) {
             // if($exist_mahasiswa) {
-            if ($exist_mahasiswa->nama != $request->nama) {
+            if ($exist_mahasiswa->nama != $request->nama)
+            {
+                $datae_mahasiwa['nama'] = $request->nama;
+            } else
+            {
                 $datae_mahasiwa['nama'] = $request->nama;
             }
-            else{
-                $datae_mahasiwa['nama'] = $request->nama;
-            }
-            if ($exist_mahasiswa->npm != $request->npm) {
+            
+            if ($exist_mahasiswa->npm != $request->npm)
+            {
+                $datae_mahasiwa['npm'] = $request->npm;
+            } else
+            {
                 $datae_mahasiwa['npm'] = $request->npm;
             }
-            else{
-                $datae_mahasiwa['npm'] = $request->npm;
-            }
-            if ($exist_mahasiswa->kelas != $request->kelas) {
+
+            if ($exist_mahasiswa->kelas != $request->kelas)
+            {
+                $datae_mahasiwa['kelas'] = $request->kelas;
+            } else
+            {
                 $datae_mahasiwa['kelas'] = $request->kelas;
             }
-            else{
-                $datae_mahasiwa['kelas'] = $request->kelas;
-            }
-            if ($exist_mahasiswa->absen != $request->absen) {
+
+            if ($exist_mahasiswa->absen != $request->absen)
+            {
+                $datae_mahasiwa['absen'] = $request->absen;
+            } else
+            {
                 $datae_mahasiwa['absen'] = $request->absen;
             }
-            else{
-                $datae_mahasiwa['absen'] = $request->absen;
+
+            if ($exist_mahasiswa -> nomor_telepon != $request -> nomor_telepon)
+            {
+                $datae_mahasiwa['nomor_telepon'] = $request -> nomor_telepon;
+            } else
+            {
+                $datae_mahasiwa['nomor_telepon'] = $request -> nomor_telepon;
             }
-            if ($exist_mahasiswa->prodi_id != $request->prodi_id) {
+
+            if ($exist_mahasiswa->prodi_id != $request->prodi_id)
+            {
+                $datae_mahasiwa['prodi_id'] = $request->prodi_id;
+            } else
+            {
                 $datae_mahasiwa['prodi_id'] = $request->prodi_id;
             }
-            else{
-                $datae_mahasiwa['prodi_id'] = $request->prodi_id;
-            }
-            if ($exist_mahasiswa->jenis_kelamin != $request->jenis_kelamin) {
+
+            if ($exist_mahasiswa->jenis_kelamin != $request->jenis_kelamin)
+            {
+                $datae_mahasiwa['jenis_kelamin'] = $request->jenis_kelamin;
+            } else
+            {
                 $datae_mahasiwa['jenis_kelamin'] = $request->jenis_kelamin;
             }
-            else{
-                $datae_mahasiwa['jenis_kelamin'] = $request->jenis_kelamin;
+
+            if ($exist_mahasiswa->nama_ayah != $request->nama_ayah)
+            {
+                $datae_mahasiwa['nama_ayah'] = $request->nama_ayah;
+            } else
+            {
+                $datae_mahasiwa['nama_ayah'] = $request->nama_ayah;
             }
+
+            if ($exist_mahasiswa->nama_ibu != $request->nama_ibu)
+            {
+                $datae_mahasiwa['nama_ibu'] = $request->nama_ibu;
+            } else
+            {
+                $datae_mahasiwa['nama_ibu'] = $request->nama_ibu;
+            }
+
+            if ($exist_mahasiswa -> alamat != $request->alamat)
+            {
+                $datae_mahasiwa['alamat'] = $request -> alamat;
+            } else
+            {
+                $datae_mahasiwa['alamat'] = $request -> alamat;
+            }
+
             $datae_mahasiwa['foto'] = $data_mahasiswa->foto;
+            
+
+            if ($exist_mahasiswa -> status_vaksin != $request -> status_vaksin)
+            {
+                $datae_mahasiwa['status_vaksin'] = $request -> status_vaksin;
+            } else
+            {
+                $datae_mahasiwa['status_vaksin'] = $request -> status_vaksin;
+            }
+
+            $datae_mahasiwa['sertifikat_vaksin'] = $data_mahasiswa->sertifikat_vaksin;
             $datae_mahasiwa['status_registrasi'] = 1;
 
-            if (!empty($exist_toga)) {
-                // if($exist_toga) {
-                if ($exist_toga->nama_ayah != $request->nama_ayah) {
-                    $datae_toga['nama_ayah'] = $request->nama_ayah;
-                }
-                else{
-                    $datae_toga['nama_ayah'] = $request->nama_ayah;
-                }
-                if ($exist_toga->nama_ibu != $request->nama_ibu) {
-                    $datae_toga['nama_ibu'] = $request->nama_ibu;
-                }
-                else{
-                    $datae_toga['nama_ibu'] = $request->nama_ibu;
-                }
-                Toga::whereMahasiswa_id($exist_mahasiswa->id)->update($datae_toga);
-                Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_mahasiwa);
-
-                return back()->with(['success' => 'Data berhasil diubah.']);
-
-            }
-            ## jika tidak ada data di database
-            else {
-                $data_toga->mahasiswa_id = $exist_mahasiswa->id;
-                $data_toga->nama_ayah = $request->nama_ayah;
-                $data_toga->nama_ibu = $request->nama_ibu;
-                $data_toga->save();
-                Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_mahasiwa);
-
-                return back()->with(['success' => 'Data berhasil disimpan.']);
-            }
+            Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_mahasiwa);
+            return back()->with(['success' => 'Data dan berkas berhasil disimpan.']);
 
 
         }
         ## jika tidak ada data di database table mahasiswa
-        else {
+        else 
+        {
             $data_mahasiswa->nama = $request->nama;
             $data_mahasiswa->npm = $request->npm;
             $data_mahasiswa->kelas = $request->kelas;
             $data_mahasiswa->absen = $request->absen;
+            $data_mahasiswa->nomor_telepon = $request -> nomor_telepon;
             $data_mahasiswa->prodi_id = $request->prodi_id;
             $data_mahasiswa->jenis_kelamin = $request->jenis_kelamin;
-            $data_mahasiswa['status_registrasi'] = 1;
+            $data_mahasiswa->nama_ayah = $request->nama_ayah;
+            $data_mahasiswa->nama_ibu = $request->nama_ibu;
+            $data_mahasiswa->alamat = $request->alamat;
+            $data_mahasiswa->status_vaksin = $request->status_vaksin;
             $data_mahasiswa->save();
 
             $data_toga->mahasiswa_id = $exist_mahasiswa->id;
-            $data_toga->nama_ayah = $request->nama_ayah;
-            $data_toga->nama_ibu = $request->nama_ibu;
+            // $data_toga->nama_ayah = $request->nama_ayah;
+            // $data_toga->nama_ibu = $request->nama_ibu;
             $data_toga->save();
 
-            if (!empty($exist_toga)) {
+            if (!empty($exist_toga))
+            {
                 // if($exist_toga) {
                 if ($exist_toga->nama_ayah != $request->nama_ayah) {
                     $datae_toga['nama_ayah'] = $request->nama_ayah;
@@ -240,10 +302,11 @@ class RegistrasiController extends Controller
 
             }
             ## jika tidak ada data di database
-            else {
+            else
+            {
                 $data_toga->mahasiswa_id = Auth::user()->id;
-                $data_toga->nama_ayah = $request->nama_ayah;
-                $data_toga->nama_ibu = $request->nama_ibu;
+                // $data_toga->nama_ayah = $request->nama_ayah;
+                // $data_toga->nama_ibu = $request->nama_ibu;
                 $data_toga->save();
                 return back()->with(['success' => 'Data dan berkas berhasil disimpan.']);
 

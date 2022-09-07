@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name') }} | Sistem Informasi Wisudawan</title>
+    <title>Sistem Informasi Wisudawan</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -33,11 +33,11 @@
     <link href="{{ asset('css/auth.css') }}" rel="stylesheet">
 </head>
 <body style="overflow: hidden">
-    <div id="app">
+    <div id="app" style="height: 100vh">
 
         {{-- @include('guest.nav') --}}
 
-        <main class="py-0">
+        <main class="py-0" >
             @yield('content')
         </main>
     </div>

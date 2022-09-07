@@ -14,7 +14,8 @@ class Toga extends Model
      * @var array
      */
     protected $fillable = [
-        'id','mahasiswa_id','size_toga','no_wa','asal_daerah','nama_ayah','nama_ibu'
+        'id','mahasiswa_id','size_toga', 'status'
+        //,'no_wa','asal_daerah','nama_ayah','nama_ibu'
     ];
 
     /**

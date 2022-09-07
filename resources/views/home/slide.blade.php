@@ -67,15 +67,15 @@
     @media only screen and (max-width: 300px) {
       .text {font-size: 11px}
     }
-    </style>
+</style>
 
-    </head>
-    <body>
+</head>
+<body>
 
-    <div class="slideshow-container">
+  <div class="slideshow-container">
 
     @foreach ($banners as $ban)
-        <div class="mySlides fadeSlides">
+        <div class="mySlides ">
             <a @if($ban->link == NULL) @else href="{{ $ban->link}}" target="_blank" @endif>
                 <img class="imgSlides" src="{{ asset($ban->bannername) }}" style="width:100%" alt="{{$ban->bannername}}">
             </a>
@@ -89,30 +89,38 @@
         @endforeach
     </div>
 
-    </div>
+  </div>
 
 
-    <script>
+  <script>
     var slideIndex = 0;
     showSlides();
 
-    function showSlides() {
+    function showSlides()
+    {
       var i;
       var slides = document.getElementsByClassName("mySlides");
       var dots = document.getElementsByClassName("dot");
-      for (i = 0; i < slides.length; i++) {
+
+      for (i = 0; i < slides.length; i++)
+      {
         slides[i].style.display = "none";
       }
+
       slideIndex++;
+      
       if (slideIndex > slides.length) {slideIndex = 1}
-      for (i = 0; i < dots.length; i++) {
+
+      for (i = 0; i < dots.length; i++)
+      {
         dots[i].className = dots[i].className.replace(" active", "");
       }
+
       slides[slideIndex-1].style.display = "block";
       dots[slideIndex-1].className += " active";
       setTimeout(showSlides, 7000); // Change image every
     }
-    </script>
+  </script>
 
-    </body>
-    </html>
+</body>
+</html>

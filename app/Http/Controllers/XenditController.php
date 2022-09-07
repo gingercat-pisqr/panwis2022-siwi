@@ -30,7 +30,7 @@ class XenditController extends Controller
 
         Xendit::setApiKey($this->secret_api_key);
 
-        $external_id = "".Auth::user()->id.".".Auth::user()->npm.".".Auth::user()->email;
+        // $external_id = "".Auth::user()->id.".".Auth::user()->npm.".".Auth::user()->email;
 
         $id = '610110b2909c2f5c6e80b028';
         $getInvoice = \Xendit\Invoice::retrieve($id);
@@ -39,7 +39,8 @@ class XenditController extends Controller
         //   'external_id' => $external_id,
         //   'payer_email' => Auth::user()->email,
         //   'description' => 'Pembayaran Toga',
-        //   'amount' => 200000
+        //   'amount' => 200000,
+        //   'for-user-id' => $id
         // ];
 
         // $createInvoice = \Xendit\Invoice::create($params);

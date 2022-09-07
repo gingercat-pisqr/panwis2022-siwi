@@ -35,155 +35,168 @@ class HomeController extends Controller
         $jam = date('H:i');
 
         //atur salam menggunakan IF
-        if ($jam > '00:01' && $jam < '10:00') {
+        if ($jam > '00:01' && $jam < '10:00')
+        {
             $salam = 'Pagi';
-        } elseif ($jam >= '10:00' && $jam < '15:00') {
+        } elseif ($jam >= '10:00' && $jam < '15:00')
+        {
             $salam = 'Siang';
-        } elseif ($jam < '18:00') {
+        } elseif ($jam < '18:00')
+        {
             $salam = 'Sore';
-        } else {
+        } else
+        {
             $salam = 'Malam';
         }
 
         $user = Auth::user();
 
-        if(Auth::user()){
-        $users = DB::table('users')->where('id', '=', $user->id)->get()
-        ->first();
-        $mahasiswas = DB::table('mahasiswas')->where('npm', '=', $user->npm)->get()
-        ->first();
-        $banners = DB::table('banners')->get();
-        $status_persembahan = DB::table('statuss')->where('id', '=', 3)->get()->first();
-        $status_keringanan = DB::table('statuss')->where('id', '=', 4)->get()->first();
-        $status_regis = DB::table('statuss')->where('id', '=', 1)->get()->first();
-        $status_toga = DB::table('statuss')->where('id', '=', 2)->get()->first();
-        $status_iuran = DB::table('statuss')->where('id', '=', 5)->get()->first();
-        $persembahans = DB::table('persembahans')->where('mahasiswa_id', '=', $mahasiswas->id)->get()
-        ->first();
-        $status_persembahan = DB::table('statuss')->where('id', '=', 3)->get()->first();
+        if(Auth::user())
+        {
+            $users = DB::table('users')->where('id', '=', $user->id)->get()
+            ->first();
+            $mahasiswas = DB::table('mahasiswas')->where('npm', '=', $user->npm)->get()
+            ->first();
+            $banners = DB::table('banners')->get();
+            // $status_persembahan = DB::table('statuss')->where('id', '=', 3)->get()->first();
+            $status_keringanan = DB::table('statuss')->where('id', '=', 4)->get()->first();
+            $status_regis = DB::table('statuss')->where('id', '=', 1)->get()->first();
+            $status_toga = DB::table('statuss')->where('id', '=', 2)->get()->first();
+            $status_iuran = DB::table('statuss')->where('id', '=', 5)->get()->first();
+            // $persembahans = DB::table('persembahans')->where('mahasiswa_id', '=', $mahasiswas->id)->get()->first();
+            // $status_persembahan = DB::table('statuss')->where('id', '=', 3)->get()->first();
 
-        $persem = 0;
+            // $persem = 0;
 
-        if(!empty($persembahans)){
-            $persem = 1;
-        }else{
-            $persem = 0;
-        }
+            // if(!empty($persembahans))
+            // {
+            //     $persem = 1;
+            // } else
+            // {
+            //     $persem = 0;
+            // }
 
-        $pelunasan = DB::table('pelunasans')->where('mahasiswa_id', '=', $mahasiswas->id)->get()->first();
+            $pelunasan = DB::table('pelunasans')->where('mahasiswa_id', '=', $mahasiswas->id)->get()->first();
 
-        $getInvoice = array('status' => 'Bla');
+            $getInvoice = array('status' => 'Bla');
 
-        if(!empty($pelunasan)){
+            if(!empty($pelunasan))
+            {
+                Xendit::setApiKey('xnd_production_UlOYPCqw7NmD9JNJK6RCAUXwmNm8KT23Xrlp7uxTkqGpP93ikIPLU7nWXGY');
 
-            Xendit::setApiKey('xnd_production_UlOYPCqw7NmD9JNJK6RCAUXwmNm8KT23Xrlp7uxTkqGpP93ikIPLU7nWXGY');
+                $id = $pelunasan->invoice_id;
+                $getInvoice = \Xendit\Invoice::retrieve($id);
 
-            $id = $pelunasan->invoice_id;
-            $getInvoice = \Xendit\Invoice::retrieve($id);
-
-            $exist_pelunasan = Pelunasan::whereMahasiswa_id($mahasiswas->id)->first();
-            if ($exist_pelunasan->status != $getInvoice['status']) {
-                if($getInvoice['status'] == "SETTLED" ){
-                    $datae_ambiltoga['status_ambil_toga'] = 3;
-                    $datae_pelunasan['status'] = $getInvoice['status'];
-                    $updatestatus = Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_ambiltoga);
-                    Pelunasan::whereMahasiswa_id($mahasiswas->id)->update($datae_pelunasan);
-                    if($updatestatus){
-                        return view('home', ['users'=>$users,
-                                            'salam'=>$salam,
-                                            'banners'=>$banners,
-                                            'status_persembahan'=>$status_persembahan,
-                                            'status_keringanan'=>$status_keringanan,
-                                            'status_regis'=>$status_regis,
-                                            'status_iuran'=>$status_iuran,
-                                            'status_toga'=>$status_toga,
-                                            'getInvoices'=>$getInvoice,
-                                            'persem'=>$persem,
-                                            'mahasiswas'=>$mahasiswas]
-                        );
+                $exist_pelunasan = Pelunasan::whereMahasiswa_id($mahasiswas->id)->first();
+                if ($exist_pelunasan->status != $getInvoice['status'])
+                {
+                    if($getInvoice['status'] == "SETTLED" )
+                    {
+                        $datae_ambiltoga['status_ambil_toga'] = 3;
+                        $datae_pelunasan['status'] = $getInvoice['status'];
+                        $updatestatus = Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_ambiltoga);
+                        Pelunasan::whereMahasiswa_id($mahasiswas->id)->update($datae_pelunasan);
+                        if($updatestatus)
+                        {
+                            return view('home', ['users'=>$users,
+                                                'salam'=>$salam,
+                                                'banners'=>$banners,
+                                                // 'status_persembahan'=>$status_persembahan,
+                                                'status_keringanan'=>$status_keringanan,
+                                                'status_regis'=>$status_regis,
+                                                'status_iuran'=>$status_iuran,
+                                                'status_toga'=>$status_toga,
+                                                'getInvoices'=>$getInvoice,
+                                                // 'persem'=>$persem,
+                                                'mahasiswas'=>$mahasiswas]
+                            );
+                        }
+                    } else if($getInvoice['status'] == "PAID" )
+                    {
+                        $datae_ambiltoga['status_ambil_toga'] = 3;
+                        $datae_pelunasan['status'] = $getInvoice['status'];
+                        $updatestatus = Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_ambiltoga);
+                        Pelunasan::whereMahasiswa_id($mahasiswas->id)->update($datae_pelunasan);
+                        if($updatestatus)
+                        {
+                            return view('home', ['users'=>$users,
+                                                'salam'=>$salam,
+                                                'banners'=>$banners,
+                                                // 'status_persembahan'=>$status_persembahan,
+                                                'status_keringanan'=>$status_keringanan,
+                                                'status_regis'=>$status_regis,
+                                                'status_iuran'=>$status_iuran,
+                                                'status_toga'=>$status_toga,
+                                                'getInvoices'=>$getInvoice,
+                                                // 'persem'=>$persem,
+                                                'mahasiswas'=>$mahasiswas]
+                            );
+                        }
+                    } else if($getInvoice['status'] == "PENDING")
+                    {
+                        $datae_ambiltoga['status_ambil_toga'] = 2;
+                        $datae_pelunasan['status'] = $getInvoice['status'];
+                        $updatestatus = Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_ambiltoga);
+                        Pelunasan::whereMahasiswa_id($mahasiswas->id)->update($datae_pelunasan);
+                        if($updatestatus)
+                        {
+                            return view('home', ['users'=>$users,
+                                                'salam'=>$salam,
+                                                'banners'=>$banners,
+                                                // 'status_persembahan'=>$status_persembahan,
+                                                'status_keringanan'=>$status_keringanan,
+                                                'status_regis'=>$status_regis,
+                                                'status_iuran'=>$status_iuran,
+                                                'status_toga'=>$status_toga,
+                                                'getInvoices'=>$getInvoice,
+                                                // 'persem'=>$persem,
+                                                'mahasiswas'=>$mahasiswas]
+                            );
+                        }
+                    } else if($getInvoice['status'] == "EXPIRED")
+                    {
+                        $datae_ambiltoga['status_ambil_toga'] = 1;
+                        $datae_pelunasan['status'] = $getInvoice['status'];
+                        $updatestatus = Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_ambiltoga);
+                        Pelunasan::whereMahasiswa_id($mahasiswas->id)->update($datae_pelunasan);
+                        if($updatestatus)
+                        {
+                            return view('home', ['users'=>$users,
+                                                'salam'=>$salam,
+                                                'banners'=>$banners,
+                                                // 'status_persembahan'=>$status_persembahan,
+                                                'status_keringanan'=>$status_keringanan,
+                                                'status_regis'=>$status_regis,
+                                                'status_iuran'=>$status_iuran,
+                                                'status_toga'=>$status_toga,
+                                                'getInvoices'=>$getInvoice,
+                                                // 'persem'=>$persem,
+                                                'mahasiswas'=>$mahasiswas]
+                            );
+                        }
                     }
-                }
-                else if($getInvoice['status'] == "PAID" ){
-                    $datae_ambiltoga['status_ambil_toga'] = 3;
+                } else
+                {
                     $datae_pelunasan['status'] = $getInvoice['status'];
-                    $updatestatus = Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_ambiltoga);
                     Pelunasan::whereMahasiswa_id($mahasiswas->id)->update($datae_pelunasan);
-                    if($updatestatus){
-                        return view('home', ['users'=>$users,
-                                            'salam'=>$salam,
-                                            'banners'=>$banners,
-                                            'status_persembahan'=>$status_persembahan,
-                                            'status_keringanan'=>$status_keringanan,
-                                            'status_regis'=>$status_regis,
-                                            'status_iuran'=>$status_iuran,
-                                            'status_toga'=>$status_toga,
-                                            'getInvoices'=>$getInvoice,
-                                            'persem'=>$persem,
-                                            'mahasiswas'=>$mahasiswas]
-                        );
-                    }
                 }
-                else if($getInvoice['status'] == "PENDING"){
-                    $datae_ambiltoga['status_ambil_toga'] = 2;
-                    $datae_pelunasan['status'] = $getInvoice['status'];
-                    $updatestatus = Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_ambiltoga);
-                    Pelunasan::whereMahasiswa_id($mahasiswas->id)->update($datae_pelunasan);
-                    if($updatestatus){
-                        return view('home', ['users'=>$users,
-                                            'salam'=>$salam,
-                                            'banners'=>$banners,
-                                            'status_persembahan'=>$status_persembahan,
-                                            'status_keringanan'=>$status_keringanan,
-                                            'status_regis'=>$status_regis,
-                                            'status_iuran'=>$status_iuran,
-                                            'status_toga'=>$status_toga,
-                                            'getInvoices'=>$getInvoice,
-                                            'persem'=>$persem,
-                                            'mahasiswas'=>$mahasiswas]
-                        );
-                    }
-                }
-                else if($getInvoice['status'] == "EXPIRED"){
-                    $datae_ambiltoga['status_ambil_toga'] = 1;
-                    $datae_pelunasan['status'] = $getInvoice['status'];
-                    $updatestatus = Mahasiswa::whereNpm(Auth::user()->npm)->update($datae_ambiltoga);
-                    Pelunasan::whereMahasiswa_id($mahasiswas->id)->update($datae_pelunasan);
-                    if($updatestatus){
-                        return view('home', ['users'=>$users,
-                                            'salam'=>$salam,
-                                            'banners'=>$banners,
-                                            'status_persembahan'=>$status_persembahan,
-                                            'status_keringanan'=>$status_keringanan,
-                                            'status_regis'=>$status_regis,
-                                            'status_iuran'=>$status_iuran,
-                                            'status_toga'=>$status_toga,
-                                            'getInvoices'=>$getInvoice,
-                                            'persem'=>$persem,
-                                            'mahasiswas'=>$mahasiswas]
-                        );
-                    }
-                }
+
             }
-            else{
-                $datae_pelunasan['status'] = $getInvoice['status'];
-                Pelunasan::whereMahasiswa_id($mahasiswas->id)->update($datae_pelunasan);
-            }
-
+            return view('home', ['users'=>$users,
+                                'salam'=>$salam,
+                                'banners'=>$banners,
+                                // 'status_persembahan'=>$status_persembahan,
+                                'status_keringanan'=>$status_keringanan,
+                                'status_regis'=>$status_regis,
+                                'status_iuran'=>$status_iuran,
+                                'status_toga'=>$status_toga,
+                                'getInvoices'=>$getInvoice,
+                                // 'persem'=>$persem,
+                                'mahasiswas'=>$mahasiswas]
+            );
+        } else
+        {
+            return redirect('/');
         }
-        return view('home', ['users'=>$users,
-                            'salam'=>$salam,
-                            'banners'=>$banners,
-                            'status_persembahan'=>$status_persembahan,
-                            'status_keringanan'=>$status_keringanan,
-                            'status_regis'=>$status_regis,
-                                            'status_iuran'=>$status_iuran,
-                            'status_toga'=>$status_toga,
-                            'getInvoices'=>$getInvoice,
-                            'persem'=>$persem,
-                            'mahasiswas'=>$mahasiswas]
-        );
-    }else{
-        return redirect('/');
-    }
     }
 }

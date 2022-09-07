@@ -46,6 +46,10 @@
     margin-top: 50px;
 }
 
+@media (max-width: 700px) {
+    
+}
+
 .image-auth{
     width:200px;
     height: 200px;
@@ -170,7 +174,7 @@
     position: relative;
     margin: auto;
     margin-top: -20px;
-    background-color: var(--light-blue);
+    background-color: #c6ae6e;
     border:none;
     color: var(--white);
 }
@@ -181,7 +185,7 @@
     height: 80px;
     position: relative;
     margin: auto;
-    background-color: var(--dark);
+    background-color: #11343a;
     border:none;
     color: var(--white);
 }
@@ -203,7 +207,7 @@
 }
 
 .btn-auth:hover{
-    background-color: var(--dark-blue);
+    background-color: #948048;
     box-shadow: var(--box-shadow);
     transition-duration : 1.5s;
 }
@@ -281,12 +285,26 @@
     z-index: 90;
 }
 
-.logo-rotating{
-    width: 1200px;
+.logo-rotating {
+    position: absolute;
+    top: 0px;
+    right:0px;
+    width: 200px;
     height: auto;
-    opacity: 0.2;
+    opacity: 0.8;
     box-shadow: var(--box-shadow);
     animation: rotation 50s infinite linear;
+}
+.logo-rotating-2 {
+    position: absolute;
+    top: 0px;
+    right:0px;
+    width: 200px;
+    height: auto;
+    opacity: 0.8;
+    box-shadow: var(--box-shadow);
+    animation: rotation 50s infinite linear;
+   animation-direction: reverse; 
 }
 
 @media (max-width : 900px) {
@@ -300,9 +318,12 @@
 
 }
 @media (max-width : 700px) {
-    .logo-rotating{
+    /* .logo-rotating{
         display: none;
     }
+    .logo-rotating-2{
+        display: none;
+    } */
 
 }
 

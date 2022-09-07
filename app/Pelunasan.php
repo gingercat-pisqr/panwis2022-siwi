@@ -17,7 +17,7 @@ class Pelunasan extends Model
      * @var array
      */
     protected $fillable = [
-        'id','mahasiswa_id',	'order_id',	'type',	'status',	'link_xendit'
+        'id','mahasiswa_id', 'order_id', 'type', 'status', 'link_xendit', 'invoice_id'
     ];
 
     /**

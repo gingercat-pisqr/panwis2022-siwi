@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name') }} | Sistem Informasi Wisudawan</title>
+    <title>Sistem Informasi Wisudawan</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -36,7 +36,7 @@
             <div class="preloader__square" id="preloader__square"></div>
         </div>
     </div>
-    <div id="app">
+    <div id="app" style="height: 100vh">
             {{-- <div class="status">Loading<span class="status__dot">.</span><span class="status__dot">.</span><span class="status__dot">.</span></div> --}}
 
 

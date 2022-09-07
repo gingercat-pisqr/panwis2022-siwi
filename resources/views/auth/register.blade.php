@@ -34,7 +34,7 @@
 
                                 @error('npm')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+                                        <strong>{{ $message }}</strong>`
                                     </span>
                                 @enderror
                     </div>
@@ -75,7 +75,7 @@
                         <div class="form-group row" style="margin: 30px 0 18px 0">
                             <div class="col-md-12 text-md-center">
                                 <button type="submit" class="btn-auth btn-primary">
-                                    {{ __('Register') }}
+                                    {{ __('Daftar') }}
                                 </button>
                             </div>
                         </div>
@@ -83,14 +83,6 @@
             </div>
         </div>
 </div>
-        <div class="image-rotate">
-            <img src="{{asset('img/logo_angkatan.png')}}" class="logo-rotating" alt="">
-        </div>
-
-        <div class="image-rotate-2">
-            <img src="{{asset('img/logo_angkatan.png')}}" class="logo-rotating" alt="">
-        </div>
-
 @else
     @include('welcome');
 @endif

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md">
+<nav class="navbar navbar-expand-md" style="background: #11343A">
     <div class="container">
         <img src="{{asset('img/logo_siwi.png')}}" class="nav-logo">
         @if (Route::has('login'))

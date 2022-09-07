@@ -11,11 +11,11 @@
                         <div class="preloader__square" id="preloader__square"></div>
                         <div class="preloader__square" id="preloader__square"></div>
                     </div>
-                    {{-- <div class="status">Loading<span class="status__dot">.</span><span class="status__dot">.</span><span class="status__dot">.</span></div> --}}
+                    {{-- <div class="status">Memuat<span class="status__dot">.</span><span class="status__dot">.</span><span class="status__dot">.</span></div> --}}
                 </div>
 
                     <div class="auth-header" style="margin-bottom: 50px;margin-top:40px">
-                        <b>Reset <i>Password</i></b>
+                        <b>Atur ulang kata sandi</b>
                     </div>
 
                     @if (session('status'))
@@ -28,10 +28,10 @@
                         @csrf
 
                         <div class="card-auth-title">
-                            <label class="text-md-right">E-mail Address</i><label>
+                            <label class="text-md-right">Alamat surel</i><label>
                         </div>
                         <div class="form-group row">
-                            {{-- <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label> --}}
+                            {{-- <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('Alamat surel') }}</label> --}}
 
                                 <input id="email" type="email" class="auth-input form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
@@ -44,7 +44,7 @@
 
                         <div class="row mb-0 form-footer text-md-center">
                             <button type="submit" class="btn-auth btn-primary" style="width: auto">
-                                    {{ __('Send Password Reset Link') }}
+                                    {{ __('Kirim tautan atur ulang kata sandi') }}
                                 </button>
                         </div>
                     </form>

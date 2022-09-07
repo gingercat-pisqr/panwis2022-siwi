@@ -16,7 +16,7 @@
         <div class="col-md-8">
             <br>
             @include("home.countdown")
-            <div class="home-title">Selamat {{$salam ??''}}, {{ $mahasiswas->nama ??'' }}</div>
+            <div class="home-title" style="color: #11343A;">Selamat {{$salam ??''}}, {{ $mahasiswas->nama ??'' }}</div>
 
             @include("home.slide")
 
@@ -32,7 +32,7 @@
                     <td>
                     <div class="status col-md-8 text-md-left">
 
-                            <p><b>Status Pendaftaran Wisuda</b></p>
+                        <p><b>Status Pendaftaran Wisuda</b></p>
 
                     </div>
                     </td>
@@ -52,7 +52,7 @@
                     <td>
                     <div class="status col-md-8 text-md-left">
 
-                        <p><b>Status Pendataan Toga</b></p>
+                        <p><b>Status Konfirmasi Pendataan Ukuran Toga</b></p>
 
                     </div>
                     </td>
@@ -60,7 +60,7 @@
                     <div class="status col-md-4 text-md-right">
                         @if ($mahasiswas->status_ambil_toga  == 1)
                             <button class="btn btn-warning">Belum Dikunci</button>
-                        @elseif ($mahasiswas->status_ambil_toga  == 2)
+                        @elseif ($mahasiswas->status_ambil_toga  == 2 || $mahasiswas->status_ambil_toga == 3)
                             <button class="btn btn-success">Berhasil <i class="fas fa-check-circle"></i></button>
                         @else
                             <button class="btn btn-danger">Kosong</button>
@@ -70,28 +70,15 @@
                     </tr>
                     <tr>
                     <td>
-                    <div class="status col-md-8 text-md-left">
-
-                        <p><b>Status Peresembahan Wisudawan</b></p>
-
-                    </div>
-                    </td>
-                    <td class="float-right">
-                    <div class="status col-md-4 text-md-right">
-                        @if ( $persem  == 1)
-                            <button class="btn btn-success">Berhasil <i class="fas fa-check-circle"></i></button>
-                        @else
-                            <button class="btn btn-danger">Kosong</button>
-                        @endif
-                    </div>
+                    
                     </td>
                     </tr>
-                    @if($status_iuran->status > 0)
+                    @if($status_iuran->status >= 0)
                     <tr>
                     <td>
                     <div class="status col-md-8 text-md-left">
 
-                        <p><b>Status Pembayaran Iuran</b></p>
+                        <p><b>Status Pembayaran</b></p>
 
                     </div>
                     </td>
@@ -123,7 +110,7 @@
                         <div class="menus-icon">
                             <img src="{{ asset('img/regist.png')}}">
                         </div>
-                        <div class="menus-caption">
+                        <div class="menus-caption" style="color: #11343a">
                             {{ __('Pendaftaran Wisuda') }}
                         </div>
                     </div>
@@ -135,62 +122,22 @@
                         <div class="menus-icon">
                             <img src="{{ asset('img/toga.png')}}">
                         </div>
-                        <div class="menus-caption">
-                            {{ __('Pendataan Toga') }}
+                        <div class="menus-caption" style="color: #11343a">
+                            {{ __('Konfirmasi Pendataan Ukuran Toga') }}
                         </div>
                     </div>
                     </div>
                 </a>
-                @if($status_persembahan->status > 0)
-                    <a class="menus-link" href="{{ route('persembahan') }}">
-                        <div class="col-md-6">
-                        <div class="menus-button ">
-                            <div class="menus-icon">
-                                <img src="{{ asset('img/persembahan.png')}}">
-                            </div>
-                            <div class="menus-caption">
-                                {{ __('Persembahan Wisudawan') }}
-                            </div>
-                        </div>
-                        </div>
-                    </a>
-                @endif
-                @if($status_iuran->status > 0)
+                
+                @if($status_iuran->status >= 0)
                     <a class="menus-link" href="{{ route('iuran') }}">
                         <div class="col-md-6">
                         <div class="menus-button ">
                             <div class="menus-icon">
                                 <img src="{{ asset('img/bayar.png')}}">
                             </div>
-                            <div class="menus-caption">
-                                {{ __('Pembayaran Iuran') }}
-                            </div>
-                        </div>
-                        </div>
-                    </a>
-                @else
-                    <div class="menus-link fade">
-                        <div class="col-md-6">
-                        <div class="menus-button ">
-                            <div class="menus-icon">
-                                <img src="{{ asset('img/bayar.png')}}">
-                            </div>
-                            <div class="menus-caption">
-                                {{ __('Pembayaran Iuran') }}
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                @endif
-                @if($status_keringanan->status > 0)
-                    <a class="menus-link" href="{{ route('keringanan') }}">
-                        <div class="col-md-6">
-                        <div class="menus-button ">
-                            <div class="menus-icon">
-                                <img src="{{ asset('img/keringanan.png')}}">
-                            </div>
-                            <div class="menus-caption">
-                                {{ __('Pengajuan Keringanan') }}
+                            <div class="menus-caption" style="color: #11343a">
+                                {{ __('Pembayaran') }}
                             </div>
                         </div>
                         </div>
@@ -200,13 +147,13 @@
 
         </div>
     </div>
-
 </div>
+
 <div class="modal fade bd-example-modal-lg" id="exampleModal2" tabindex="1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog rounded border-0 modal-lg" role="document">
       <div class="modal-content rounded border-0">
-        <div class="modal-header header-popup">
-          <h5 class="modal-title title-popup" style="font-family: Fontin" id="exampleModalLabel">Pendataan Toga</h5>
+        <div class="modal-header header-popup" style="background-color: #11343A;">
+          <h5 class="modal-title title-popup" style="font-family: Fontin;" id="exampleModalLabel">Pendataan Toga</h5>
           <button type="button" class="close white" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -242,7 +189,8 @@
                       <input class="input-faq" type="radio" id="rd4" name="rd">
                       <label class="tab-label" for="rd4">Kapan batas akhir pengisian Pendataan Toga?</label>
                       <div class="tab-content">
-                        Masa pengisian Pendataan Toga dapat dilakukan hingga <b>Minggu, 8 Agustus 2021 pukul 20.00 WIB.</b>
+                        Masa pengisian Pendataan Toga dapat dilakukan hingga waktu yang ditentukan
+                        <!-- <b>Minggu, 8 Agustus 2021 pukul 20.00 WIB.</b> -->
                       </div>
                     </div>
                     <div class="tab">
@@ -252,18 +200,12 @@
                         Ya. Wisudawan harus melakukan pendaftaran terlebih dahulu sebelum melakukan pendataan toga.
                       </div>
                     </div>
-                    <div class="tab">
-                      <input class="input-faq" type="radio" id="rd6" name="rd">
-                      <label class="tab-label" for="rd6">Apakah alamat yang dicantumkan harus alamat rumah?</label>
-                      <div class="tab-content">
-                        Tidak, alamat yang dicantumkan dapat menyesuaikan lokasi wisudawan di mana wisudawan dapat menerima paket toga yang akan dikirimkan. Estimasi pengiriman toga pada bulan September hingga Oktober.
-                      </div>
-                    </div>
+                    
                     <div class="tab">
                       <input class="input-faq" type="radio" id="rd7" name="rd">
-                      <label class="tab-label" for="rd7">Jika waktu pengisian pendataan toga wisudawan telah ditutup, apakah calon wisudawan masih dapat melakukan perubahan alamat pengiriman?</label>
+                      <label class="tab-label" for="rd7">Jika waktu pengisian pendataan toga wisudawan telah ditutup, apakah calon wisudawan masih dapat melakukan perubahan data?</label>
                       <div class="tab-content">
-                        Wisudawan dapat menghubungi LO masing-masing jika ada perubahan alamat pengiriman.
+                        Wisudawan dapat menghubungi LO masing-masing jika ada perubahan data.
                       </div>
                     </div>
                   </div>
@@ -275,7 +217,7 @@
         {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> --}}
             <br>
             <div class="col-md-12 text-md-right">
-                <a href="{{ route('toga') }}" class="btn-auth-primary btn-primary" style="background-color:#273e6c;">
+                <a href="{{ route('toga') }}" class="btn-auth-primary btn-primary" style="background-color: #11343A;">
                     {{ __('Lakukan Pendataan Toga') }} &nbsp;<i class="fa fa-angle-double-right"></i>
                 </a>
             </div>

@@ -6,10 +6,11 @@
 @if( !empty(Session::get('nama')))
 <div class="row justify-content-center">
     <div class="content-auth col-md-10 ">
-            {{-- <div class="image-auth col-md-4">
-                <img src="{{asset('img/logo_siwi.png')}}" alt="">
-            </div>
-            <div class="col-md-1"></div> --}}
+    {{--<div class="image-auth col-md-4">
+            <img src="{{asset('img/logo_siwi.png')}}" alt="">
+        </div>
+
+        <div class="col-md-1"></div> --}}
         <div class="card-auth col-md-6">
                 {{-- @include('part.notification') --}}
                 <div id="main" class="main col-md-12 text-md-center">
@@ -26,7 +27,7 @@
                     <b>Selamat Datang, {{ Session::get('nama') }}</b>
                 </div>
                 <div class="p">
-                    Silakan &nbsp;<i>login</i>&nbsp; ke akun SIWI Anda
+                    Silakan &nbsp;masuk&nbsp; ke akun SIWI Anda
                 </div>
                     <form method="POST" class="form-auth col-md-8" style="padding-top: 40px" action="{{ route('login') }}">
                         @csrf
@@ -45,8 +46,9 @@
                         </div>
 
                         <div class="card-auth-title">
-                            <label class="text-md-right"><i>{{ __('Password') }}</i><label>
+                            <label class="text-md-right">{{ __('Kata sandi') }}</label>
                         </div>
+                        
                         <div class="form-group row">
                                 <input id="password" type="password" data-toggle="password" class="auth-input-pass form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
@@ -64,8 +66,8 @@
                                     </label>
                                     <label class="form-forget" for="remember">
                                         @if (Route::has('password.request'))
-                                            <a class="btn btn-link link-forget" href="{{ route('password.request') }}">
-                                                Lupa <i>Password </i>?
+                                            <a class="btn btn-link link-forget" href="{{ route('password.request') }}" style="color: #C9AC75; text-decoration:none">
+                                                Lupa kata sandi?
                                             </a>
                                         @endif
                                     </label>
@@ -73,20 +75,13 @@
 
                         <div class="ow mb-0 form-footer text-md-center">
                                 <button type="submit" class="btn-auth btn-primary">
-                                    {{ __('Login') }}
+                                    {{ __('Masuk') }}
                                 </button>
                         </div>
                     </form>
                 </div>
             </div>
 </div>
-            <div class="image-rotate">
-                <img src="{{asset('img/logo_angkatan.png')}}" class="logo-rotating" alt="">
-            </div>
-
-            <div class="image-rotate-2">
-                <img src="{{asset('img/logo_angkatan.png')}}" class="logo-rotating" alt="">
-            </div>
 @else
     @include('welcome');
 @endif
