@@ -12,7 +12,7 @@
 <h1>Sistem Informasi Wisudawan</h1>
 
 <h6>Divisi Website</h6>
-<h6>DKV Panitia Wisuda Akbar PKN STAN 2021</h6>
+<h6>DKV Panitia Wisuda Akbar PKN STAN</h6>
 
 ## Features
 
@@ -29,6 +29,10 @@ Adam Junio Selva
 Wonosobo, Indonesia
 PKN STAN D-III KBN 2019
 
+Rakha Mulia Pratama
+Purwokerto, Indonesia
+PKN STAN D-IV MKN 2021
+
 ## Developer Journal
 
 16/6/21 -   First Flight, create laravel react app
@@ -36,3 +40,5 @@ PKN STAN D-III KBN 2019
 20/6/21 -   Add db + seed faker, Cek NPM, Change Input Register Login neccesary 
             <!-- TO-DO:add set email confirm, reset pass -->
 21/6/21 -   Add set email confirm, reset pass
+
+07/09/22 -   Modify design, fixed bugs, add Xendit payment
